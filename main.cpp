@@ -1,9 +1,9 @@
-
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-
+#include <fstream>
 using namespace std;
+
 
 
 bool Ifempty(char X) {
@@ -45,8 +45,11 @@ int cGame(char(&a)[3][3]) {
     int i = rand() % 3;
     int j = rand() % 3;
 
-    if (Ifempty(a[i][j])) {
+    if (Ifempty(a[i][j]))
+    {
         a[i][j] = 'O';
+    }
+    else cGame(a);
 
         if (IfWin(a, 'O')) {
             cout << "The computer wins!"<<endl;
@@ -55,14 +58,15 @@ int cGame(char(&a)[3][3]) {
             cout << "It's a tie"<<endl;
             return 0;
         }
-    } else {
 
-    }
 
     return 1;
 }
 
 int main() {
+    ofstream file("gameResult.txt");
+    file<<"palyer"<<","<<"computer"<<endl;
+
     char tic[3][3] = { {' ', ' ', ' '},
                        {' ', ' ', ' '},
                        {' ', ' ', ' '} };
@@ -76,7 +80,7 @@ int main() {
     int i, j;
 
     while (true) {
-        std::cout << tic[0][0] << "|" << tic[0][1] << "|" << tic[0][2] <<endl
+              cout << tic[0][0] << "|" << tic[0][1] << "|" << tic[0][2] <<endl
                   << tic[1][0] << "|" << tic[1][1] << "|" << tic[1][2] << endl
                   << tic[2][0] << "|" << tic[2][1] << "|" << tic[2][2] << endl;
 
@@ -87,14 +91,16 @@ int main() {
 
             if (IfWin(tic, 'X') == 1) {
                 cout << "You win!"<<endl;
+                file<<1<<","<<0<<endl;
                 return 0;
             }
         }
 
         if (!cGame(tic)) {
+            file<<0<<","<<1<<endl;
             break;
         }
     }
-
+file.close();
     return 0;
 }
